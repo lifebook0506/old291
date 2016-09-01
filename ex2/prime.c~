@@ -1,0 +1,26 @@
+#include <stdio.h>
+
+int main(void){
+  int x = 2; 
+  int y;
+
+  while (x < 100 ) {
+    for(y = 2; y < x; y++ ){
+      if(x%y == 0 && x==y){
+	printf("%d\n",x);
+	break;
+      }else if (x%y == 0){
+	break; 
+      }
+    }
+    x++; 
+  }
+      /* if(x%y == 0 && y ==x){
+	printf("%d\n",x); 
+      }else{
+	y++; 
+      } 
+      
+      }*/
+  return 0; 
+}
