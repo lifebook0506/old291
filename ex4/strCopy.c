@@ -1,0 +1,30 @@
+#include <stdio.h>
+
+char* my_Str_Copy(char*,char*);
+
+int main(void){
+  char dest[100];
+  char src[] = "Test String\n";
+  
+  char *p;
+  
+  if (p = my_Str_Copy(dest,src)){
+    printf("%s\n",p);
+    return(0);
+  }else{
+    printf("null pointer recieved\n");
+    return(1);
+  }
+}
+
+/*d= destination buff
+  s = source str*/
+
+char* my_Str_Copy(char *d,char *s){
+  int i; 
+  for(i = 0; s[i]!= '\0';i++){
+    d[i] = s[i];
+  }
+  
+  return s;
+}
