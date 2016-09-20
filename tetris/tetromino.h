@@ -49,7 +49,7 @@ int rotate_cw(tetromino_t *);
 int rotate_ccw(tetromino_t *);
 tetromino_t *create_tetromino (int, int);
 int destroy_tetromino(tetromino_t *);
-void print_tetromino(tetromino_t *tet);
-void test_tetromino(void);
+void display_tetromino(tetromino_t *);
+void undisplay_tetromino(tetromino_t *);
 
 /* tetromino.h ends here */

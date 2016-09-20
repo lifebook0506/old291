@@ -139,7 +139,7 @@ tetromino_t *create_tetromino (int initial_x, int initial_y) {
   return(tet);
 }
 
-display_tetromino(tetromino_t *tet) {
+void display_tetromino(tetromino_t *tet) {
   int x,y;
   for (x=0;x<4;x++) {
     for (y=0;y<+4;y++) {
@@ -150,7 +150,7 @@ display_tetromino(tetromino_t *tet) {
   }
 }
 
-undisplay_tetromino(tetromino_t *tet) {
+void undisplay_tetromino(tetromino_t *tet) {
   int x,y;
   for (x=0;x<4;x++) {
     for (y=0;y<+4;y++) {
