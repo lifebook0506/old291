@@ -85,9 +85,15 @@ int game(void) {
 	switch (arrow) {
 	case UP:
 	  mvprintw(10,10,"UP            ");
+	  undisplay_tetromino(current);
+	  rotate_cw(current);
+	  display_tetromino(current);
 	  break;
 	case DOWN:
 	  mvprintw(10,10,"DOWN          ");
+	  undisplay_tetromino(current);
+	  rotate_cw(current);
+	  display_tetromino(current);
 	  break;
 	case LEFT:
 	  mvprintw(10,10,"LEFT          ");
@@ -100,7 +106,13 @@ int game(void) {
 	  if (c=='q'){
 	    state = EXIT;
 	  }
-  	  break;
+	  if (c == ' '){
+	    //new tetrimino instance
+	    undisplay_tetromino(current);
+	    destroy_tetromino(current);
+	    state = ADD_PIECE;
+	  }
+  	break;
 	default:
 	  break;
 	}
