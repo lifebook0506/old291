@@ -131,7 +131,6 @@ int rotate_ccw(tetromino_t *tet) {
 tetromino_t *create_tetromino (int initial_x, int initial_y) {
   int type;
   tetromino_t *tet = malloc(sizeof(tetromino_t));
-  srand(time(NULL));
   type = rand()%7;
   memcpy(tet, &tetromino_types[type], sizeof(tetromino_t));
   tet->upper_left_x = initial_x;

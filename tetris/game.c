@@ -60,6 +60,7 @@ int game(void) {
   while(1) {
     switch(state) {
     case INIT:               // Initialize the game, only run one time 
+      srand(time(NULL));     // Init rand number generator for create
       initscr();
       nodelay(stdscr,TRUE);  // Do not wait for characters using getch.  
       noecho();              // Do not echo input characters 
