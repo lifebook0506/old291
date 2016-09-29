@@ -58,7 +58,7 @@ int game(void) {
   struct timespec tim_ret;
   int move_counter = 0;
   int move_timeout = BASE_FALL_RATE;            
-
+  
   while(1) {
     switch(state) {
     case INIT:               // Initialize the game, only run one time 
@@ -100,38 +100,45 @@ int game(void) {
 	  break;
 	case LEFT:
 	  mvprintw(10,10,"LEFT          ");
+	  undisplay_tetromino(current); 
+	  move_tet(current,current->upper_left_x -1, current->upper_left_y);
+	  display_tetromino(current); 
 	  break;
 	case RIGHT:
 	  mvprintw(10,10,"RIGHT         ");
+	  undisplay_tetromino(current); 
+	  move_tet(current,current->upper_left_x+1,current->upper_left_y);
+	  display_tetromino(current); 
 	  break;
 	case REGCHAR: 
 	  mvprintw(10,10,"REGCHAR 0x%02x",c);
 	  if (c == 'q') {
 	    state = EXIT;
 	  }
-	  /*lkjasd;flkjasldfj
-	   */
+	   
 	  if (c == ' '){
-	    //new tetrimino instance
-	    undisplay_tetromino(current);
-	    destroy_tetromino(current);
-	    state = ADD_PIECE;
+	    move_timeout = DROP_RATE;
 	  }
-  	break;
-	default:
-	  break;
- 	  }
 	}
       } 
       if (move_counter++ >= move_timeout) {
 	move_counter = 0;
+	undisplay_tetromino(current); 
+	if (move_tet(current,current->upper_left_x,current->upper_left_y +1) == MOVE_FAILED){
+	  destroy_tetromino(current); 
+	  state = ADD_PIECE;
+	  display_tetromino(current); 
+	}else{ 
+	  display_tetromino(current);
+	  move_timeout = BASE_FALL_RATE;
+	}
       }
       break;
     case EXIT:
       endwin();
       return(0);
       break;
-    }
+     }
     refresh();
     nanosleep(&tim,&tim_ret);
   }
