@@ -87,6 +87,13 @@ highscore_t *game(highscore_t *highscores) {
 	current = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
 	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
       }
+      status = move_tet(current, current->upper_left_x,current->upper_left_y); 
+      
+      if (status == MOVE_FAILED){
+        state = GAME_OVER;
+	break; 
+      }
+
       display_tetromino(current);
       state = MOVE_PIECE;
       break;
@@ -127,6 +134,9 @@ highscore_t *game(highscore_t *highscores) {
 	status = move_tet(current,current->upper_left_x,current->upper_left_y+1);
 	display_tetromino(current);
 	if (status == MOVE_FAILED) {
+	  //prune_well(w);
+	  score = compute_score(score,prune_well(w)); 
+	  display_score(score, w->upper_left_x-15,w->upper_left_y);
 	  state = ADD_PIECE;
 	  move_timeout = BASE_FALL_RATE;
 	}
@@ -139,6 +149,7 @@ highscore_t *game(highscore_t *highscores) {
       getmaxyx(stdscr,y,x);
       mvprintw(1,x/2-5,"  GAME_OVER  ");
       mvprintw(2,x/2-5,"#############");
+      mvprintw(3,x/2-5,"Score: %d",score);
       mvprintw(16,x/2-5,"Hit q to exit");
       getch(); // Wait for a key to be pressed. 
       state = EXIT;
