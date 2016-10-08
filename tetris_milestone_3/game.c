@@ -20,7 +20,7 @@
  */
 
 /* Change log:
- * 
+ * Oct 7,2016
  * 
  */
 
@@ -48,7 +48,7 @@ void init_game(void) {
 }
 
 highscore_t *game(highscore_t *highscores) {
-  static int state = INIT;
+  static int state = SPLASH;
   tetromino_t *next = NULL;
   tetromino_t *current = NULL;
   well_t *w;
@@ -67,6 +67,17 @@ highscore_t *game(highscore_t *highscores) {
 
   while(1) {
     switch(state) {
+    case SPLASH:
+      nodelay(stdscr,FALSE);
+      clear();
+      getmaxyx(stdscr,y,x);
+      mvprintw(1,x/2-5,("  Welcome to Tetris  "));
+      mvprintw(2,x/2-5,("#####################"));
+      mvprintw(3,x/2-5,(" "));
+      mvprintw(4,x/2-5,("Press any key to continue"));
+      getch();
+      state = INIT;
+      break;
     case INIT:               // Initialize the game, only run one time 
       initscr();
       nodelay(stdscr,TRUE);  // Do not wait for characters using getch.  
@@ -80,12 +91,19 @@ highscore_t *game(highscore_t *highscores) {
       break;
     case ADD_PIECE:          // Add a new piece to the game
       if (next) {
+	undisplay_tetromino(next);
+	status = move_tet(next,w->upper_left_x+(w->width/2),w->upper_left_y);
+	
+	if(status == MOVE_FAILED){
+	  state= GAME_OVER; 
+	  break;
+	}
 	current = next;
-	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
+	next = create_tetromino (w->upper_left_x+15, w->upper_left_y);
       }
       else {
 	current = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
-	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
+	next = create_tetromino (w->upper_left_x+15, w->upper_left_y);
       }
       status = move_tet(current, current->upper_left_x,current->upper_left_y); 
       
@@ -94,6 +112,7 @@ highscore_t *game(highscore_t *highscores) {
 	break; 
       }
 
+      display_tetromino(next); 
       display_tetromino(current);
       state = MOVE_PIECE;
       break;
