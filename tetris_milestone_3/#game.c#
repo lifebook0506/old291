@@ -20,7 +20,7 @@
  */
 
 /* Change log:
- * Oct 7,2016
+ * 
  * 
  */
 
@@ -67,17 +67,6 @@ highscore_t *game(highscore_t *highscores) {
 
   while(1) {
     switch(state) {
-    case SPLASH:
-      nodelay(stdscr,FALSE);
-      clear();
-      getmaxyx(stdscr,y,x);
-      mvprintw(1,x/2-5,("  Welcome to Tetris  "));
-      mvprintw(2,x/2-5,("#####################"));
-      mvprintw(3,x/2-5,(" "));
-      mvprintw(4,x/2-5,("Press any key to continue"));
-      getch();
-      state = INIT;
-      break;
     case INIT:               // Initialize the game, only run one time 
       initscr();
       nodelay(stdscr,TRUE);  // Do not wait for characters using getch.  
@@ -91,28 +80,13 @@ highscore_t *game(highscore_t *highscores) {
       break;
     case ADD_PIECE:          // Add a new piece to the game
       if (next) {
-	undisplay_tetromino(next);
-	status = move_tet(next,w->upper_left_x+(w->width/2),w->upper_left_y);
-	
-	if(status == MOVE_FAILED){
-	  state= GAME_OVER; 
-	  break;
-	}
 	current = next;
-	next = create_tetromino (w->upper_left_x+15, w->upper_left_y);
+	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
       }
       else {
 	current = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
-	next = create_tetromino (w->upper_left_x+15, w->upper_left_y);
+	next = create_tetromino ((w->upper_left_x+(w->width/2)), w->upper_left_y);
       }
-      status = move_tet(current, current->upper_left_x,current->upper_left_y); 
-      
-      if (status == MOVE_FAILED){
-        state = GAME_OVER;
-	break; 
-      }
-
-      display_tetromino(next); 
       display_tetromino(current);
       state = MOVE_PIECE;
       break;
@@ -153,9 +127,6 @@ highscore_t *game(highscore_t *highscores) {
 	status = move_tet(current,current->upper_left_x,current->upper_left_y+1);
 	display_tetromino(current);
 	if (status == MOVE_FAILED) {
-	  //prune_well(w);
-	  score = compute_score(score,prune_well(w)); 
-	  display_score(score, w->upper_left_x-15,w->upper_left_y);
 	  state = ADD_PIECE;
 	  move_timeout = BASE_FALL_RATE;
 	}
@@ -168,7 +139,6 @@ highscore_t *game(highscore_t *highscores) {
       getmaxyx(stdscr,y,x);
       mvprintw(1,x/2-5,"  GAME_OVER  ");
       mvprintw(2,x/2-5,"#############");
-      mvprintw(3,x/2-5,"Score: %d",score);
       mvprintw(16,x/2-5,"Hit q to exit");
       getch(); // Wait for a key to be pressed. 
       state = EXIT;
